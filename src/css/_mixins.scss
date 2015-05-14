@@ -1,0 +1,32 @@
+/**
+
+Mixins
+
+***/
+
+@mixin box-border ($color) {
+  border: $border-width solid $color;
+}
+
+@mixin form-text () {
+//  color:$accent;
+	font-size: 1.15em;
+}
+
+@mixin triangle ($color) {
+  content:"";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 25px 25px 0;
+  margin: 0 auto;
+  border-color: $color transparent transparent;
+  position: absolute;
+  top: 100%;
+  left: 45%;
+  z-index: 20;
+
+  @media (min-width: 40em) {
+    left: 48%;
+  }
+}

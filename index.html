@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="dist/css/mingle_style.css"/>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Slab|Roboto' rel='stylesheet' type='text/css'>
+<link rel="icon" href="favicon.ico" type="image/png"/>
+<title>Mingle Mangle</title>
+</head>
+<body>
+
+	<div class="even">
+		<header>
+				<h1>minglemangle</h1>
+				<p>A text collage and remix tool.</p>
+		</header>
+	</div>
+
+  <form name="getthings" id="textthings" class="inputform">
+		<div class="odd">
+			<fieldset class="input-set">
+				<legend>Paste or write a text in each input box:</legend>
+				<label for="txtOne" class="screenread">enter text one</label>
+		    <textarea id="txtOne" class="txtinput txt-one" type="text" name="textone"></textarea>
+				<label for="txtTwo" class="screenread">enter text two</label>
+		    <textarea id="txtTwo" class="txtinput txt-two" type="text" name="texttwo"></textarea>
+			</fieldset>
+		</div>
+		<div class="even">
+			<fieldset class="radio-set">
+				<legend>Break texts at:</legend>
+				<div>
+					<input id="sentence"type="radio" name="break" value="sentence" checked="checked">
+					<label for="sentence">every sentence</label>
+				</div>
+				<div>
+					<input id="word" type="radio" name="break" value="word">
+					<label for="word">every word</label>
+				</div>
+				<div>
+					<input id="ecksWords" type="radio" name="break" value="xwords">
+					<label for="ecksWords">every <label for="numWords" class="screenread">enter number of words</label><input type="number" id="numWords" class="num-words" min="1" max="10"/> words</label>
+				</div>
+			</fieldset>
+		</div>
+		<div class="odd">
+  		<input id ="butInput" class="butinput" type="button" value="minglemangle"/>
+		</div>
+  </form>
+
+	<div id="ocontainer">
+		<div id="output" aria-live="polite">
+		</div>
+	</div>
+
+	<footer>
+		<small>designed and developed by <a href="http://tellthemachines.com">tellthemachines</a>.</small>
+	</footer>
+
+	<script src="dist/js/mangle.js"></script>
+</body>
+</html>
