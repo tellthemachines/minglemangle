@@ -14,7 +14,7 @@ Mixins
 }
 
 @mixin triangle ($color) {
-  content:"";
+  content: "";
   width: 0;
   height: 0;
   border-style: solid;
@@ -29,4 +29,23 @@ Mixins
   @media (min-width: 40em) {
     left: 48%;
   }
+}
+
+@mixin skew-border ($color, $angle) {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  height: 55px;
+  background-color: $color;
+  transform: skewY($angle);
+}
+
+@mixin skew-none () {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 0;
+  transform: skewY(0);
 }

@@ -7,7 +7,7 @@ function work(){
 	var first = document.getElementById("txtOne").value;
 	var second = document.getElementById("txtTwo").value;
 
-	if (first == "" || second == "") {
+	if (first == "" && second == "") {
 		return;
 	}
 
@@ -19,6 +19,7 @@ function work(){
 	// get radio button value and mingle or mangle accordingly
 
 	var mnglResult;
+
 
 	if (document.getElementById('sentence').checked) {
 	  mnglResult = mingle(first, second);
@@ -50,18 +51,25 @@ function work(){
 
 function mangle(first, second, xWds) {
 
+	var randomate = document.getElementById('randomise').checked;
+
 	//prepare input text for keeping caps after punctuation and preserving paragraphs
 
 	first = paragRepl(first, false);
 	first = lowerChar(first);
-	first = noSpaces(first);
+	first = noSpacesStart(first);
 	second = paragRepl(second, false);
 	second = lowerChar(second);
-	second = noSpaces(second);
+	second = noSpacesStart(second);
 
 	// lowercase first char of second text
 
 	second = second.charAt(0).toLowerCase() + second.slice(1);
+
+
+	if(randomate === true) {
+		first = first.charAt(0).toLowerCase() + first.slice(1);
+	}
 
 	// split into arrays
 
@@ -75,7 +83,6 @@ function mangle(first, second, xWds) {
 		var numWords = Math.round(document.getElementById("numWords").value);
 		numWords > 10 ? numWords = 10: numWords < 1? numWords = 1: numWords = numWords;
 
-		console.log(numWords);
 
 		arrFirst = everyEcks(arrFirst, numWords);
 		arrSecond = everyEcks(arrSecond, numWords);
@@ -83,37 +90,29 @@ function mangle(first, second, xWds) {
 
 	var allTogether = togetherIt(arrFirst,arrSecond);
 
+	if(randomate === true) {
+		allTogether = shuffle(allTogether);
+		allTogether[0] = noSpacesStart(allTogether[0]);
+		allTogether[0] = allTogether[0].charAt(0).toUpperCase() + allTogether[0].slice(1);
+	}
+
 	var mangling = allTogether.join(" ");
 
 	//correct caps after punctuation
 
 	mangling = upperChar(mangling);
 
+	// always punctuate at end
+
+	mangling = noSpacesEnd(mangling);
+
+
+
 	// do parags
 
 	var mngParags = mangling.split("(grarg) ");
-	var mngLen = mngParags.length;
 
-	for (var l = 0; l < mngLen; l++) {
-
-		//remove any empty paragraphs
-
-		if(mngParags[l] === ""){
-			var trash = mngParags.splice(l,1);
-
-			mngLen--;
-			l--;
-
-			continue;
-		}
-
-		// remove any spaces at beginning of paragraphs
-
-		mngParags[l] = noSpaces(mngParags[l]);
-
-	}
-
-	return mngParags;
+	return prepParags(mngParags);
 
 };
 
@@ -127,6 +126,8 @@ function mangle(first, second, xWds) {
 // mingle breaks texts into sentences and builds a composite of both by alternating sentences from each
 
 function mingle(first, second){
+
+	var randomate = document.getElementById('randomise').checked;
 
 	//prepare input for keeping paragraphs
 
@@ -143,13 +144,21 @@ function mingle(first, second){
 
 	var allTogether = togetherIt(arrFirst,arrSecond);
 
+	if(randomate === true){
+		allTogether = shuffle(allTogether);
+
+		if (allTogether[0].search(/\(grarg\)/) !== -1){
+			allTogether[0] = " " + allTogether[0];
+		}
+	}
+
 	var mangling = allTogether.join(" ");
 
 	// do paragraphs
 
 	var mngParags = mangling.split(" (grarg)");
 
-	return mngParags;
+	return prepParags(mngParags);
 
 };
 
@@ -167,6 +176,7 @@ function displayIt(mngld) {
 		var display = document.getElementById("output");
 		display.className = "text-display";
 		document.getElementById("ocontainer").className = "ocontainer";
+		document.getElementById("butblock").className += " odd";
 
 		// wrap the paragraphs in <p> tags and put them in a string
 
@@ -201,21 +211,86 @@ function paragRepl(str, spaceBefore){
 			return "(grarg) ";
 		}
 	});
-	str = str.replace(/\(grarg\)\s(?![A-Z])/g, "");
+	// str = str.replace(/\(grarg\)\s(?![A-Z])/g, "");
 	return str;
 }
 
-// remove spaces at beginning of string
+// remove spaces at start of string
 
-function noSpaces(str){
+function noSpacesStart(str){
 	if(str[0] === " ") {
 		str = str.slice(1);
-		return noSpaces(str);
+		return noSpacesStart(str);
 	}
 	else {
 		return str;
 	}
 
+}
+
+// remove spaces at end of string
+
+function noSpacesEnd(str){
+	if(str[str.length-1] === " ") {
+		str = str.slice(0,-1);
+		return noSpacesEnd(str);
+	}
+	else {
+		return str;
+	}
+
+}
+
+// punctuate all the paragraphs!
+
+function punctParags(str){
+	if	(str[str.length-1] !== "." && str[str.length-1] !== "?" && str[str.length-1] !== "!") {
+		if	(str[str.length-1] === "," || str[str.length-1] === ";" || str[str.length-1] === ":") {
+
+			str = str.slice(0,-1) + ".";
+		}
+		else {
+			str += ".";
+		}
+	}
+
+	return str;
+}
+
+// prepare paragraphs for display
+
+function prepParags(arr) {
+
+	var mngLen = arr.length;
+
+	for (var l = 0; l < mngLen; l++) {
+
+		//remove any empty paragraphs
+
+		if(!/\S/.test(arr[l])){
+			var trash = arr.splice(l,1);
+
+			mngLen--;
+			l--;
+
+			continue;
+		}
+
+		// remove any spaces at beginning of paragraphs
+
+		arr[l] = noSpacesStart(arr[l]);
+
+		// remove any spaces at end of paragraphs
+
+		arr[l] = noSpacesEnd(arr[l]);
+
+		// punctuate
+
+		arr[l] = punctParags(arr[l]);
+
+	}
+
+	return arr;
 }
 
 // highlight punctuation
@@ -264,6 +339,27 @@ function everyEcks(array, num){
 	return newArr;
 };
 
+// shuffle array
+
+function shuffle(array) {
+  var currentIndex = array.length,
+			temporaryValue,
+			randomIndex;
+
+  while (0 !== currentIndex) {
+
+    // pick a remaining element
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // swap it with the current element
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
 
 // mix two arrays together
 

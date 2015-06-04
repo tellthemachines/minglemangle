@@ -10,7 +10,7 @@
 </head>
 <body>
 
-	<div class="even">
+	<div class="even block">
 		<header>
 				<h1>minglemangle</h1>
 				<p>A text collage and remix tool.</p>
@@ -18,7 +18,7 @@
 	</div>
 
   <form name="getthings" id="textthings" class="inputform">
-		<div class="odd">
+		<div class="odd block">
 			<fieldset class="input-set">
 				<legend>Paste or write a text in each input box:</legend>
 				<label for="txtOne" class="screenread">enter text one</label>
@@ -27,7 +27,7 @@
 		    <textarea id="txtTwo" class="txtinput txt-two" type="text" name="texttwo"></textarea>
 			</fieldset>
 		</div>
-		<div class="even">
+		<div class="even block">
 			<fieldset class="radio-set">
 				<legend>Break texts at:</legend>
 				<div>
@@ -43,8 +43,12 @@
 					<label for="ecksWords">every <label for="numWords" class="screenread">enter number of words</label><input type="number" id="numWords" class="num-words" min="1" max="10"/> words</label>
 				</div>
 			</fieldset>
+			<div class="checkbox-random">
+				<label for="randomise">Randomise sequence</label>
+				<input id="randomise" type="checkbox" name="random">
+			</div>
 		</div>
-		<div class="odd">
+		<div id="butblock" class="block">
   		<input id ="butInput" class="butinput" type="button" value="minglemangle"/>
 		</div>
   </form>
